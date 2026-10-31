@@ -1,0 +1,178 @@
+==================================================
+       FASTAPI MICROSERVICES - PROJECT NOTES
+==================================================
+
+1. JWT SECRET KEY
+-----------------
+
+Purpose:
+JWT_SECRET_KEY is used to sign and verify JWT tokens.
+
+Generate a secret key using this command:
+
+python -c "import secrets; print(secrets.token_urlsafe(48))"
+
+Copy the generated value into the .env file:
+
+JWT_SECRET_KEY=your_generated_secret_key
+
+IMPORTANT:
+- Generate the secret only once per environment.
+- No need to generate it every time you start the application.
+- Keep the secret private.
+- Never upload the actual .env file to GitHub.
+- If the secret changes, previously generated tokens
+  will no longer be valid.
+- Auth Service and User Service must use the same
+  secret when using HS256 for token signing/verification.
+
+
+2. ENVIRONMENT CONFIGURATION (.env)
+------------------------------------
+
+Example configuration:
+
+DATABASE_URL=postgresql+psycopg://username:password@localhost:5432/database_name
+JWT_SECRET_KEY=your_generated_secret_key
+
+Use your actual database credentials in your local
+.env file.
+
+Do not push actual credentials to GitHub.
+
+
+3. PYTHON VIRTUAL ENVIRONMENT
+------------------------------
+
+Create virtual environment:
+
+python -m venv venv
+
+Activate environment (Windows PowerShell):
+
+.\venv\Scripts\Activate.ps1
+
+Install dependencies:
+
+pip install -r requirements.txt
+
+
+4. START THE SERVICES
+----------------------
+
+Run commands from the project root.
+
+USER SERVICE - PORT 8000:
+
+uvicorn User_service.main:app --reload --port 8000
+
+AUTH SERVICE - PORT 8001:
+
+uvicorn Auth_service.main:app --reload --port 8001
+
+FRONTEND - PORT 5500:
+
+cd frontend
+
+node server.js
+
+Run each service in a separate terminal.
+
+
+5. APPLICATION URLS
+--------------------
+
+Frontend:
+http://127.0.0.1:5500
+
+Login Page:
+http://127.0.0.1:5500/login.html
+
+Registration Page:
+http://127.0.0.1:5500/register.html
+
+Users Page:
+http://127.0.0.1:5500/index.html
+
+User Service Swagger:
+http://127.0.0.1:8000/docs
+
+Auth Service Swagger:
+http://127.0.0.1:8001/docs
+
+
+6. GITHUB - .gitignore
+-----------------------
+
+Create a .gitignore file in the project root.
+
+Add the following:
+
+_pycache_/
+*.pyc
+venv/
+.venv/
+fastapi/
+.env
+*/.env
+node_modules/
+.vscode/
+
+IMPORTANT:
+Never push:
+- Database passwords
+- JWT secret keys
+- Actual .env files
+- Virtual environment folders
+
+
+7. .env.example
+----------------
+
+Create an .env.example file with placeholder values.
+
+Example:
+
+DATABASE_URL=postgresql+psycopg://username:password@localhost:5432/database_name
+
+JWT_SECRET_KEY=replace_with_your_own_secret
+
+Push .env.example to GitHub, but never push
+your actual .env files.
+
+
+8. WHEN CLONING THE PROJECT ON ANOTHER COMPUTER
+------------------------------------------------
+
+1. Install Python and PostgreSQL.
+2. Clone the GitHub repository.
+3. Create a Python virtual environment.
+4. Activate the virtual environment.
+5. Install dependencies:
+
+   pip install -r requirements.txt
+
+6. Create local .env files.
+7. Configure the database connection.
+8. Generate a JWT secret key for that environment.
+9. Configure the same JWT secret in both services
+   if both use HS256.
+10. Start all three services.
+
+
+9. IMPORTANT REMINDERS
+-----------------------
+
+- JWT secret generation is a one-time setup per
+  environment.
+- Do not generate a new secret every time you run
+  the application.
+- Keep database credentials and JWT secrets private.
+- Use requirements.txt to install Python packages.
+- Use .gitignore to prevent uploading sensitive files.
+- Use a secure secrets manager or deployment
+  environment variables in production.
+
+==================================================
+                  END OF NOTES
+==================================================

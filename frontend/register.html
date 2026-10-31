@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2f4f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .register-box {
+            background: white;
+            padding: 30px;
+            width: 320px;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px #ccc;
+        }
+
+        input, button {
+            width: 100%;
+            padding: 11px;
+            margin-top: 12px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background: #16a34a;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        #message {
+            margin-top: 12px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="register-box">
+    <h2>Create Account</h2>
+
+    <form id="registerForm">
+        <input type="text" id="name"
+               placeholder="Enter name" required>
+
+        <input type="email" id="email"
+               placeholder="Enter email" required>
+
+        <input type="password" id="password"
+               placeholder="Enter password"
+               minlength="8" required>
+
+        <button type="submit">Register</button>
+    </form>
+
+    <p id="message"></p>
+
+    <p>Already registered? <a href="login.html">Login</a></p>
+</div>
+
+<script>
+document.getElementById("registerForm").addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const message = document.getElementById("message");
+
+    const user = {
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
+        password: document.getElementById("password").value
+    };
+
+    try {
+        const response = await fetch("http://127.0.0.1:8001/auth/register", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(user)
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            message.style.color = "red";
+            message.textContent = data.detail || "Registration failed";
+            return;
+        }
+
+        message.style.color = "green";
+        message.textContent = "Registration successful! Redirecting to login...";
+
+        setTimeout(() => {
+            window.location.href = "login.html";
+        }, 1500);
+
+    } catch (error) {
+        message.style.color = "red";
+        message.textContent = "Unable to connect to authentication service";
+        console.error(error);
+    }
+});
+</script>
+
+</body>
+</html>
