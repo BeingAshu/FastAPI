@@ -2,7 +2,7 @@
 from fastapi import Depends, FastAPI
 from .models import User
 from .database import SessionLocal
-import frontend.database_models as database_models
+from . import database_models
 from .database import engine
 from sqlalchemy.orm import Session
 
